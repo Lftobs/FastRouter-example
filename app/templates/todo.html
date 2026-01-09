@@ -1,0 +1,18 @@
+<div class="todo-item {% if todo.completed %}completed{% endif %}" id="todo-{{ todo.id }}">
+    <div class="todo-content" hx-put="/todos/{{ todo.id }}"
+        hx-vals='{"completed": {{ "false" if todo.completed else "true" }}}' hx-target="#todo-{{ todo.id }}"
+        hx-swap="outerHTML">
+        <div class="checkbox"></div>
+        <span class="todo-text">{{ todo.title }}</span>
+    </div>
+    <div class="actions" style="display: flex; gap: 4px;">
+        <button class="edit-btn" hx-get="/todos/{{ todo.id }}/edit" hx-target="#todo-{{ todo.id }}" hx-swap="outerHTML"
+            style="background: none; border: none; cursor: pointer; color: var(--text-secondary);">
+            ✎
+        </button>
+        <button class="delete-btn" hx-delete="/todos/{{ todo.id }}" hx-target="#todo-{{ todo.id }}"
+            hx-swap="outerHTML swap:0.3s">
+            ×
+        </button>
+    </div>
+</div>

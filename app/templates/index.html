@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    {% if user %}
+    <div class="user-header"
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            {% if user.picture %}
+            <img src="{{ user.picture }}" alt="{{ user.name }}" style="width: 32px; height: 32px; border-radius: 50%;">
+            {% endif %}
+            <span>Welcome, <strong>{{ user.name }}</strong></span>
+        </div>
+        <a href="/auth/logout" class="button"
+            style="text-decoration: none; font-size: 0.9rem; padding: 0.5rem 1rem;">Logout</a>
+    </div>
+
+    <form hx-post="/todos" hx-target="#todo-list" hx-swap="afterbegin" hx-on::after-request="this.reset()"
+        class="input-group">
+        <input type="text" name="title" placeholder="What needs to be done?" required autofocus>
+        <button type="submit">Add</button>
+    </form>
+
+    <div id="todo-list" class="todo-list">
+        {% for todo in todos %}
+        {% include "todo.html" %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 2rem 0;">
+        <p style="margin-bottom: 2rem; color: var(--text-secondary);">Please login to manage your todos.</p>
+        <a href="/auth/login" class="button-primary"
+            style="display: inline-block; background-color: var(--accent); color: white; padding: 1rem 2rem; border-radius: var(--radius); text-decoration: none; font-weight: 600;">Login
+            with Google</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
