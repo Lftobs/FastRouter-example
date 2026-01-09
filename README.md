@@ -1,6 +1,6 @@
 # FastRouter Example Project
 
-This request demonstrates how to use `fast-router` with FastAPI for file-based routing, similar to Next.js or SvelteKit. It implements a full-featured Todo application using **HTMX**, **SQLModel**, and **Jinja2 Templates**.
+This project demonstrates how to use `fast-router` with FastAPI for file-based routing, similar to Next.js or SvelteKit. It implements a full-featured Todo application using **HTMX**, **SQLModel**, and **Jinja2 Templates**.
 
 ## Features
 
@@ -8,22 +8,40 @@ This request demonstrates how to use `fast-router` with FastAPI for file-based r
 *   **HTMX Frontend**: A dynamic, single-page-like experience without complex JavaScript frameworks.
 *   **Database**: SQLite with SQLModel (SQLAlchemy + Pydantic).
 *   **Authentication**: Google OAuth2 integration.
-*   **Benchmarks**: Comparisons between `fast-router` and standard FastAPI routing.
 
 ## Project Structure
 
 The URL structure is defined by the file system in `app/routes`:
 
 ```
-app/routes/
-├── todos/
-│   ├── index.py           # GET /todos, POST /todos
-│   └── [id]/              # Nested dynamic route
-│       ├── index.py       # GET, PUT, DELETE /todos/{id}
-│       └── edit.py        # GET /todos/{id}/edit (Edit form)
-└── auth/
-    ├── login.py
-    └── ...
+.
+├── app
+│   ├── core               # Database config, security, settings
+│   │   ├── config.py
+│   │   ├── database.py
+│   │   └── security.py
+│   ├── models             # SQLModel database models
+│   │   ├── todo.py
+│   │   └── user.py
+│   ├── routes             # File-based routes (FastRouter)
+│   │   ├── auth
+│   │   │   ├── callback.py    # GET /auth/callback
+│   │   │   ├── login.py       # GET /auth/login
+│   │   │   └── logout.py      # GET /auth/logout
+│   │   └── todos
+│   │       ├── [id]           # Dynamic route /todos/{id}
+│   │       │   ├── edit.py    # GET /todos/{id}/edit
+│   │       │   └── index.py   # GET, PUT, DELETE /todos/{id}
+│   │       └── index.py       # GET /todos, POST /todos
+│   ├── templates          # Jinja2 templates for HTMX
+│   │   ├── index.html
+│   │   ├── layout.html
+│   │   ├── todo.html
+│   │   └── todo_edit.html
+│   └── dependencies.py    # Shared FastAPI dependencies
+├── static                 # Static files (CSS, JS)
+├── main.py                # App entrypoint
+└── pyproject.toml         # Project dependencies
 ```
 
 ## Setup & Running
@@ -48,21 +66,6 @@ This project uses `uv` for dependency management.
     ```
     Open [http://localhost:8000](http://localhost:8000) in your browser.
 
-## Benchmarks
-
-This project includes benchmarking scripts to compare `fast-router` against standard `fastapi.include_router` scaling.
-
-*   **Results**: See [BENCHMARK.md](./BENCHMARK.md).
-*   **Summary**: `fast-router` improves startup time by **~2.3x** for 500 routes and **~1.13x** for 200 complex resource modules vs standard routing.
-
-**Run Benchmarks:**
-```bash
-# Synthetic benchmark (500 simple routes)
-uv run python -m benchmarks.run_benchmark
-
-# Real-world benchmark (200 complex resources)
-uv run python -m benchmarks.run_real_benchmark
-```
 
 ## Technologies
 
